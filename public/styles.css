@@ -214,3 +214,115 @@ input:focus, select:focus, textarea:focus { outline: 2px solid var(--verde); bor
 .pill-zoo.destete { background: #fef9e7; color: #8a6d0b; }
 .pill-zoo.gazapo { background: #fef0f5; color: var(--rosa); }
 
+/* =========================================
+   RESPONSIVE — Mobile first
+   ========================================= */
+
+/* --- Extra small phones (< 360px) --- */
+@media (max-width: 359px) {
+  body { font-size: 14px; }
+  main { padding: 10px; }
+  .home-grid { grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 8px; }
+  .home-card { min-height: 160px; padding: 16px; border-radius: 20px; }
+  .home-card-icon-wrap { width: 40px; height: 40px; font-size: 20px; margin-bottom: 10px; }
+  .home-title { font-size: 14px; }
+  .home-sub { font-size: 11px; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .row2 { grid-template-columns: 1fr; }
+  .search { flex-direction: column; }
+  .search input, .search select { width: 100%; }
+}
+
+/* --- Standard phones (360px – 599px) --- */
+@media (max-width: 599px) {
+  main { padding: 12px; }
+  .home-grid { grid-template-columns: 1fr 1fr; gap: 14px; padding: 0 10px; }
+  .home-card { min-height: 180px; padding: 18px; }
+  .home-title { font-size: 16px; }
+  .module-title { font-size: 22px; }
+  .kpi-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .kpi .n { font-size: 20px; }
+  .row2 { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .tabs { gap: 4px; }
+  .tabs button { padding: 6px 10px; font-size: 13px; }
+  .btn-row { grid-template-columns: 1fr; }
+  .module-header { flex-direction: column; align-items: stretch; }
+  .module-header-actions { justify-content: stretch; }
+  .module-header-actions .btn { flex: 1; }
+  .search { flex-wrap: wrap; gap: 6px; }
+  .search input { flex: 1 1 100%; }
+  .search select { flex: 1 1 calc(50% - 3px); }
+  .stock-top { flex-wrap: wrap; gap: 6px; }
+  .stock-actions { flex-wrap: wrap; }
+  .kv { flex-direction: column; gap: 2px; }
+  .kv .v { text-align: left; }
+  .modal-card { max-height: 88vh; }
+  .confirm-actions { flex-direction: column; }
+  .confirm-actions .btn { width: 100%; }
+}
+
+/* --- Tablets (600px – 899px) --- */
+@media (min-width: 600px) and (max-width: 899px) {
+  main { padding: 20px; max-width: 700px; }
+  .home-grid { grid-template-columns: repeat(2, minmax(220px, 280px)); gap: 18px; }
+  .home-card { min-height: 200px; }
+  .kpi-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .kpi .n { font-size: 22px; }
+  .row2 { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .search { flex-wrap: wrap; }
+  .search select { flex: 1 1 calc(50% - 4px); }
+  .modal { align-items: center; }
+  .modal-card { border-radius: 18px; max-width: 560px; max-height: 80vh; }
+}
+
+/* --- Desktop (≥ 900px) --- */
+@media (min-width: 900px) {
+  body { padding-bottom: 0; font-size: 16px; }
+  main { padding: 28px 32px; max-width: 900px; }
+
+  /* Hide bottom nav on desktop, show a sidebar-style or just keep hidden */
+  .bottomnav { display: none; }
+
+  /* Home grid – 2×2 larger cards */
+  .home-grid { grid-template-columns: repeat(2, minmax(260px, 320px)); gap: 24px; }
+  .home-card { min-height: 240px; padding: 28px; }
+  .home-title { font-size: 22px; }
+  .home-sub { font-size: 14px; }
+
+  /* KPI grid – up to 4 columns */
+  .kpi-grid { grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .kpi .n { font-size: 26px; }
+
+  /* Forms */
+  .row2 { grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  /* Search bar */
+  .search { gap: 10px; }
+  .search input { flex: 2; }
+  .search select { flex: 1; }
+
+  /* Detail tabs */
+  .tabs button { padding: 10px 18px; font-size: 15px; }
+
+  /* Modals */
+  .modal { align-items: center; }
+  .modal-card { border-radius: 20px; max-width: 640px; max-height: 80vh; }
+
+  /* Cards */
+  .card { padding: 18px; border-radius: 18px; }
+
+  /* Stock */
+  .stock-actions .btn { width: auto; }
+  .btn-row { grid-template-columns: 1fr 1fr 1fr; }
+
+  /* Weight widget */
+  .widget-peso { padding: 22px 28px; }
+}
+
+/* --- Large screens (≥ 1200px) --- */
+@media (min-width: 1200px) {
+  main { max-width: 1100px; }
+  .home-grid { grid-template-columns: repeat(2, 340px); gap: 28px; }
+  .home-card { min-height: 260px; padding: 32px; }
+  .kpi-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+}
