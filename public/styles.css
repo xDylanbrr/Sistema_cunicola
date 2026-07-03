@@ -186,21 +186,22 @@ input:focus, select:focus, textarea:focus { outline: 2px solid var(--verde); bor
   .modal-card { border-radius: 18px; }
 }
 
-/* Weight widget (ISA) */
-.widget-peso { padding: 14px; }
-.widget-peso-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.widget-peso-title { font-size: 14px; font-weight: 700; color: var(--texto); }
-.widget-peso-badge { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
-.widget-peso-badge.optimo { background: #e8f6ef; color: var(--verde-osc); }
-.widget-peso-badge.bajo { background: #fff3e6; color: var(--ambar); }
-.widget-peso-badge.sobre { background: #fdecea; color: var(--rojo); }
-.widget-peso-bar-wrap { position: relative; }
-.widget-peso-bar { position: relative; height: 10px; background: linear-gradient(90deg, var(--ambar) 0%, var(--verde) 20%, var(--verde) 80%, var(--rojo) 100%); border-radius: 10px; }
-.widget-peso-dot { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 18px; height: 18px; background: #fff; border: 3px solid var(--verde-osc); border-radius: 50%; box-shadow: 0 1px 4px rgba(0,0,0,.18); }
-.widget-peso-dot.bajo { border-color: var(--ambar); }
-.widget-peso-dot.sobre { border-color: var(--rojo); }
-.widget-peso-val { position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); font-size: 12px; font-weight: 800; color: var(--texto); white-space: nowrap; background: #fff; padding: 2px 6px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
-.widget-peso-labels { display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; color: var(--suave); font-weight: 600; }
+/* Weight widget (ISA) Modernized */
+.widget-peso { padding: 18px 20px; border-radius: 20px; background: #fff; box-shadow: 0 4px 16px rgba(0,0,0,0.04); margin-bottom: 12px; }
+.widget-peso-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 26px; }
+.widget-peso-title { font-size: 15px; font-weight: 800; color: #1f2937; display: flex; align-items: center; gap: 8px; }
+.widget-peso-badge { font-size: 13px; font-weight: 800; padding: 4px 12px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.5px; }
+.widget-peso-badge.optimo { background: #dcfce7; color: #15803d; }
+.widget-peso-badge.bajo { background: #fef3c7; color: #b45309; }
+.widget-peso-badge.sobre { background: #fee2e2; color: #b91c1c; }
+.widget-peso-bar-wrap { position: relative; padding-bottom: 10px; }
+.widget-peso-bar { position: relative; height: 12px; background: linear-gradient(90deg, #f59e0b 0%, #10b981 30%, #10b981 70%, #ef4444 100%); border-radius: 12px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); }
+.widget-peso-dot { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 22px; height: 22px; background: #fff; border: 4px solid #10b981; border-radius: 50%; box-shadow: 0 2px 6px rgba(0,0,0,0.25); transition: all 0.3s ease; }
+.widget-peso-dot.bajo { border-color: #f59e0b; }
+.widget-peso-dot.sobre { border-color: #ef4444; }
+.widget-peso-val { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); font-size: 13px; font-weight: 800; color: #fff; white-space: nowrap; background: #1f2937; padding: 4px 10px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+.widget-peso-val::after { content: ''; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%); border-width: 5px 5px 0; border-style: solid; border-color: #1f2937 transparent transparent transparent; }
+.widget-peso-labels { display: flex; justify-content: space-between; margin-top: 12px; font-size: 12px; color: #6b7280; font-weight: 700; }
 
 /* Zootechnical category pill */
 .pill-zoo { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; background: #eef3f0; color: var(--verde-osc); margin-left: 4px; }
