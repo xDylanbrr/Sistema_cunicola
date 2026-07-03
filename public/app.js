@@ -534,7 +534,7 @@ async function renderDetalle(id) {
     ${pesoWidgetHtml(a)}
     <div class="tabs" id="tabs">${tabs.map(t => `<button data-t="${t[0]}" class="${detTab === t[0] ? 'active' : ''}">${t[1]}</button>`).join('')}</div>
     <div id="tabbody"></div>
-    <button class="btn sec" onclick="editarAnimal(${a.id})">✏️ Editar ficha</button>`;
+    <button class="btn btn-edit" onclick="editarAnimal(${a.id})">✏️ Editar ficha</button>`;
   document.querySelectorAll('#tabs button').forEach(b => b.onclick = () => { detTab = b.dataset.t; renderTab(a); document.querySelectorAll('#tabs button').forEach(x => x.classList.toggle('active', x === b)); });
   renderTab(a);
 }

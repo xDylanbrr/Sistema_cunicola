@@ -100,6 +100,7 @@ main { padding: 14px; max-width: 780px; margin: 0 auto; }
 
 .home-exit { margin-top: 18px; align-self: start; border: 0; background: #c0392b; color: #fff; padding: 10px 14px; border-radius: 12px; cursor: pointer; font-weight: 700; }
 .btn.sec.btn-salir { background: #c0392b !important; color: #fff !important; }
+.btn-edit { background: linear-gradient(135deg, #3498db, #2980b9) !important; color: #fff !important; box-shadow: 0 4px 12px rgba(52,152,219,0.3); border: none; }
 .module-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 .module-exit-wrap { margin-top: 0; }
 .module-exit-wrap button { width: auto; min-width: 120px; }
