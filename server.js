@@ -248,10 +248,11 @@ const SQL_ANIMAL = `SELECT a.*, r.nombre AS raza FROM animales a LEFT JOIN razas
 
 // ---------- Animales ----------
 app.get('/api/animales', (req, res) => {
-  const { estado, sexo, q } = req.query;
+  const { estado, sexo, q, raza_id } = req.query;
   let sql = SQL_ANIMAL, where = [], params = [];
   if (estado) { where.push('a.estado=?'); params.push(estado); }
   if (sexo) { where.push('a.sexo=?'); params.push(sexo); }
+  if (raza_id) { where.push('a.raza_id=?'); params.push(raza_id); }
   if (q) { where.push('(a.jaula LIKE ? OR a.arete LIKE ? OR a.observaciones LIKE ?)'); params.push(`%${q}%`, `%${q}%`, `%${q}%`); }
   if (where.length) sql += ' WHERE ' + where.join(' AND ');
   sql += ' ORDER BY CAST(a.jaula AS INTEGER), a.jaula';

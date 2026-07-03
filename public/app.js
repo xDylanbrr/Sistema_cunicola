@@ -340,24 +340,27 @@ async function renderTablero() {
 window.go2detalle = id => go('detalle', id);
 
 // ---------- LISTA DE ANIMALES ----------
-let filtro = { q: '', estado: 'Activo', sexo: '' };
+let filtro = { q: '', estado: 'Activo', sexo: '', raza_id: '' };
 async function renderAnimales() {
   app.innerHTML = `
     <div class="search">
       <input id="fq" placeholder="Buscar jaula, arete…" value="${esc(filtro.q)}" />
-      <select id="fsexo">${opts([{ v: '', t: 'Todos' }, { v: 'H', t: 'Hembras' }, { v: 'M', t: 'Machos' }], filtro.sexo)}</select>
+      <select id="fsexo">${opts([{ v: '', t: 'Todos los sexos' }, { v: 'H', t: 'Hembras' }, { v: 'M', t: 'Machos' }], filtro.sexo)}</select>
+      <select id="fraza">${opts([{ v: '', t: 'Todas las razas' }].concat(CAT.razas || []), filtro.raza_id)}</select>
     </div>
     ${moduleExitButton()}
     <div id="lista"><div class="empty">Cargando…</div></div>`;
-  const fq = document.getElementById('fq'), fs = document.getElementById('fsexo');
+  const fq = document.getElementById('fq'), fs = document.getElementById('fsexo'), fr = document.getElementById('fraza');
   fq.oninput = () => { filtro.q = fq.value; cargarLista(); };
   fs.onchange = () => { filtro.sexo = fs.value; cargarLista(); };
+  if (fr) fr.onchange = () => { filtro.raza_id = fr.value; cargarLista(); };
   cargarLista();
 }
 async function cargarLista() {
   const p = new URLSearchParams();
   if (filtro.q) p.set('q', filtro.q);
   if (filtro.sexo) p.set('sexo', filtro.sexo);
+  if (filtro.raza_id) p.set('raza_id', filtro.raza_id);
   if (filtro.estado) p.set('estado', filtro.estado);
   const rows = await api('/animales?' + p.toString());
   const cont = document.getElementById('lista');
