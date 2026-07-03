@@ -115,33 +115,37 @@ function renderHome() {
   app.innerHTML = `
     <div class="home-shell">
       <div class="home-grid home-grid-full">
-        <div class="home-card home-card-primary" data-action="app">
+        <div class="home-card home-card-monitoreo" data-action="app">
           <div class="home-content">
-            <div class="home-icon">📊</div>
+            <div class="home-card-icon-wrap">📊</div>
             <div class="home-title">Monitoreo de conejos</div>
             <div class="home-sub">Entrar al aplicativo</div>
           </div>
+          <div class="home-arrow">&#8594;</div>
         </div>
-        <div class="home-card home-card-accent" data-action="almacen">
+        <div class="home-card home-card-almacen" data-action="almacen">
           <div class="home-content">
-            <div class="home-icon">🏷️</div>
+            <div class="home-card-icon-wrap">🏷️</div>
             <div class="home-title">Almacén</div>
             <div class="home-sub">Control de alimentos y stock</div>
           </div>
+          <div class="home-arrow">&#8594;</div>
         </div>
-        <div class="home-card home-card-ghost" data-action="sensores">
+        <div class="home-card home-card-sensores" data-action="sensores">
           <div class="home-content">
-            <div class="home-icon">📡</div>
+            <div class="home-card-icon-wrap">📡</div>
             <div class="home-title">Sensores</div>
             <div class="home-sub">Datos ambientales y de bebederos</div>
           </div>
+          <div class="home-arrow">&#8594;</div>
         </div>
-        <div class="home-card home-card-ghost" data-action="vision">
+        <div class="home-card home-card-vision" data-action="vision">
           <div class="home-content">
-            <div class="home-icon">📷</div>
+            <div class="home-card-icon-wrap">📷</div>
             <div class="home-title">Visión Computacional</div>
             <div class="home-sub">Seguimiento automático por cámara</div>
           </div>
+          <div class="home-arrow">&#8594;</div>
         </div>
       </div>
     </div>`;
