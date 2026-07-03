@@ -158,3 +158,30 @@ input:focus, select:focus, textarea:focus { outline: 2px solid var(--verde); bor
   .modal { align-items: center; }
   .modal-card { border-radius: 18px; }
 }
+
+/* Weight widget (ISA) */
+.widget-peso { padding: 14px; }
+.widget-peso-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.widget-peso-title { font-size: 14px; font-weight: 700; color: var(--texto); }
+.widget-peso-badge { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+.widget-peso-badge.optimo { background: #e8f6ef; color: var(--verde-osc); }
+.widget-peso-badge.bajo { background: #fff3e6; color: var(--ambar); }
+.widget-peso-badge.sobre { background: #fdecea; color: var(--rojo); }
+.widget-peso-bar-wrap { position: relative; }
+.widget-peso-bar { position: relative; height: 10px; background: linear-gradient(90deg, var(--ambar) 0%, var(--verde) 20%, var(--verde) 80%, var(--rojo) 100%); border-radius: 10px; }
+.widget-peso-dot { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 18px; height: 18px; background: #fff; border: 3px solid var(--verde-osc); border-radius: 50%; box-shadow: 0 1px 4px rgba(0,0,0,.18); }
+.widget-peso-dot.bajo { border-color: var(--ambar); }
+.widget-peso-dot.sobre { border-color: var(--rojo); }
+.widget-peso-val { position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); font-size: 12px; font-weight: 800; color: var(--texto); white-space: nowrap; background: #fff; padding: 2px 6px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+.widget-peso-labels { display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; color: var(--suave); font-weight: 600; }
+
+/* Zootechnical category pill */
+.pill-zoo { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; background: #eef3f0; color: var(--verde-osc); margin-left: 4px; }
+.pill-zoo.gestante { background: #fbe6f2; color: var(--rosa); }
+.pill-zoo.lactante { background: #fff3e6; color: var(--ambar); }
+.pill-zoo.padrote { background: #e8f0fa; color: var(--azul); }
+.pill-zoo.engorde { background: #f0f0f0; color: #555; }
+.pill-zoo.crecimiento { background: #e8f6ef; color: var(--verde-osc); }
+.pill-zoo.destete { background: #fef9e7; color: #8a6d0b; }
+.pill-zoo.gazapo { background: #fef0f5; color: var(--rosa); }
+

@@ -366,11 +366,12 @@ async function cargarLista() {
   cont.innerHTML = rows.map(a => {
     const rep = a.sexo === 'H' && a.estado_reproductivo ? pill(a.estado_reproductivo) : '';
     const peso = a.peso_kg != null ? `${a.peso_kg} kg` : 'sin peso';
+    const zoo = pillZoo(a.categoria_zootecnica);
     return `<div class="card animal-card" onclick="go('detalle', ${a.id})">
       <div class="avatar ${a.sexo}">${a.sexo === 'M' ? '♂' : '♀'}</div>
       <div class="animal-info">
         <div class="top">Jaula ${esc(a.jaula || '—')} · ${esc(a.raza || 'Sin raza')}</div>
-        <div class="sub">${peso}${a.edad_meses ? ' · ' + a.edad_meses + ' m' : ''} · ${esc(a.categoria || '')}</div>
+        <div class="sub">${peso}${a.edad_meses ? ' · ' + a.edad_meses + ' m' : ''} ${zoo}</div>
       </div>
       ${rep}
     </div>`;
@@ -379,6 +380,45 @@ async function cargarLista() {
 function pill(estado) {
   const cls = estado === 'Preñada' ? 'prenada' : estado.startsWith('Servida') ? 'servida' : 'vacia';
   return `<span class="pill ${cls}">${esc(estado)}</span>`;
+}
+
+function pillZoo(cat) {
+  if (!cat) return '';
+  let cls = '';
+  if (cat.includes('Gestante')) cls = 'gestante';
+  else if (cat.includes('Lactante') && cat.includes('Reproductora')) cls = 'lactante';
+  else if (cat === 'Padrote') cls = 'padrote';
+  else if (cat === 'Engorde') cls = 'engorde';
+  else if (cat.includes('Recría')) cls = 'crecimiento';
+  else if (cat === 'Destete') cls = 'destete';
+  else if (cat === 'Gazapo Lactante') cls = 'gazapo';
+  return `<span class="pill-zoo ${cls}">${esc(cat)}</span>`;
+}
+
+function pesoWidgetHtml(a) {
+  const ev = a.evaluacion_peso;
+  if (!ev) return '';
+  const range = ev.max - ev.min;
+  const pct = range > 0 ? Math.max(0, Math.min(100, ((ev.actual - ev.min) / range) * 100)) : 50;
+  const colorClass = ev.estado === 'Óptimo' ? 'optimo' : ev.estado === 'Bajo peso' ? 'bajo' : 'sobre';
+  const dotClass = ev.estado === 'Óptimo' ? '' : ev.estado === 'Bajo peso' ? ' bajo' : ' sobre';
+  return `<div class="card widget-peso">
+    <div class="widget-peso-header">
+      <span class="widget-peso-title">⚖️ Rango de Peso Zootécnico (ISA)</span>
+      <span class="widget-peso-badge ${colorClass}">${ev.estado}</span>
+    </div>
+    <div class="widget-peso-bar-wrap">
+      <div class="widget-peso-bar">
+        <div class="widget-peso-dot${dotClass}" style="left:${pct}%">
+          <span class="widget-peso-val">${ev.actual} kg</span>
+        </div>
+      </div>
+      <div class="widget-peso-labels">
+        <span>${ev.min} kg</span>
+        <span>${ev.max} kg</span>
+      </div>
+    </div>
+  </div>`;
 }
 
 // ---------- FORM NUEVO/EDITAR ----------
@@ -481,9 +521,10 @@ async function renderDetalle(id) {
       <div class="avatar ${a.sexo}">${a.sexo === 'M' ? '♂' : '♀'}</div>
       <div class="animal-info">
         <div class="top">Jaula ${esc(a.jaula || '—')} · ${esc(a.raza || '')}</div>
-        <div class="sub">${esc(a.categoria || '')} · ${a.peso_kg != null ? a.peso_kg + ' kg' : 'sin peso'}${a.edad_meses ? ' · ' + a.edad_meses + ' m' : ''}</div>
+        <div class="sub">${esc(a.categoria_zootecnica || a.categoria || '')} · ${a.peso_kg != null ? a.peso_kg + ' kg' : 'sin peso'}${a.edad_meses ? ' · ' + a.edad_meses + ' m' : ''}</div>
       </div>${rep}
     </div>
+    ${pesoWidgetHtml(a)}
     <div class="tabs" id="tabs">${tabs.map(t => `<button data-t="${t[0]}" class="${detTab === t[0] ? 'active' : ''}">${t[1]}</button>`).join('')}</div>
     <div id="tabbody"></div>
     <button class="btn sec" onclick="editarAnimal(${a.id})">✏️ Editar ficha</button>`;
@@ -503,6 +544,7 @@ function renderTab(a) {
 function kv(k, v) { return `<div class="kv"><span class="k">${k}</span><span class="v">${v ?? '—'}</span></div>`; }
 function fichaHtml(a) {
   return `<div class="card">
+    ${kv('Categoría zootécnica', a.categoria_zootecnica ? `${esc(a.categoria_zootecnica)} ${a.evaluacion_peso ? '(' + a.evaluacion_peso.estado + ')' : ''}` : '—')}
     ${kv('ID / Arete', esc(a.arete))}
     ${kv('Raza', esc(a.raza))}
     ${kv('Sexo', a.sexo === 'M' ? 'Macho' : 'Hembra')}
@@ -511,6 +553,7 @@ function fichaHtml(a) {
     ${kv('Origen', esc(a.origen))}
     ${kv('Genealogía', `${esc(a.id_padre) || '—'} × ${esc(a.id_madre) || '—'}`)}
     ${kv('Peso actual', a.peso_kg != null ? `${a.peso_kg} kg (${a.peso_lb} lb)` : '—')}
+    ${a.evaluacion_peso ? kv('Rango ISA', `${a.evaluacion_peso.min} – ${a.evaluacion_peso.max} kg`) : ''}
     ${kv('Cond. corporal', a.condicion_corporal ?? '—')}
     ${kv('Temperamento', esc(a.temperamento))}
     ${kv('Estado sanitario', esc(a.estado_sanitario))}

@@ -29,7 +29,7 @@ function startServer(port) {
 // ---------- Catálogos (dropdowns) ----------
 const CATALOGOS = {
   sexo: [{ v: 'M', t: 'Macho' }, { v: 'H', t: 'Hembra' }],
-  categoria: ['Reproductor', 'Reproductora', 'Reposición', 'Engorde', 'Gazapo lactante'],
+  categoria: ['Gazapo Lactante', 'Destete', 'Crecimiento / Recría', 'Engorde', 'Reemplazo', 'Padrote', 'Reproductora Vacía', 'Reproductora Gestante', 'Reproductora Lactante'],
   origen: ['Nacido en granja', 'Comprado', 'Donado', 'Intercambio'],
   temperamento: ['Dócil', 'Normal', 'Nervioso', 'Agresivo'],
   estado_sanitario: ['Sano', 'En tratamiento', 'Enfermo', 'Cuarentena'],
@@ -155,19 +155,92 @@ function enriquecerMonta(m) {
 function enriquecerParto(p) {
   return { ...p, fecha_destete_probable: addDays(p.fecha_parto, PARAMS.DESTETE_DIAS) };
 }
+
+// ---------- Categorías Zootécnicas ISA ----------
+const RANGOS_PESO_ISA = {
+  'Gazapo Lactante':        { min: 0.04, max: 0.7 },
+  'Destete':                { min: 0.6,  max: 1.2 },
+  'Crecimiento / Recría':   { min: 1.2,  max: 2.5 },
+  'Engorde':                { min: 2.2,  max: 3.0 },
+  'Reemplazo':              { min: 2.5,  max: 3.5 },
+  'Padrote':                { min: 3.5,  max: 5.0 },
+  'Reproductora Vacía':     { min: 3.5,  max: 5.5 },
+  'Reproductora Gestante':  { min: 3.5,  max: 5.5 },
+  'Reproductora Lactante':  { min: 3.5,  max: 5.5 }
+};
+
+function obtenerCategoriaZootecnica(a, edadDiasVal, estadoRepro) {
+  const edad = edadDiasVal;
+  if (edad == null) {
+    // Mapear categorías legacy a ISA para animales sin fecha de nacimiento
+    const legacy = {
+      'Reproductor': 'Padrote', 'Reproductora': 'Reproductora Vacía',
+      'Reposición': 'Reemplazo', 'Gazapo lactante': 'Gazapo Lactante'
+    };
+    const mapped = legacy[a.categoria] || a.categoria || 'Sin clasificar';
+    // Hembras sin edad: usar estado reproductivo si disponible
+    if (a.sexo === 'H' && estadoRepro) {
+      if (estadoRepro === 'Preñada' || estadoRepro.startsWith('Servida')) return 'Reproductora Gestante';
+    }
+    return mapped;
+  }
+
+  // Hembras adultas (≥5 meses = 150 días)
+  if (a.sexo === 'H' && edad >= 150) {
+    if (estadoRepro === 'Preñada') return 'Reproductora Gestante';
+    // Verificar si está lactando (parto reciente sin destete)
+    const partoReciente = db.prepare(
+      `SELECT fecha_parto FROM partos WHERE hembra_id=? AND fecha_destete_real IS NULL ORDER BY fecha_parto DESC LIMIT 1`
+    ).get(a.id);
+    if (partoReciente) {
+      const diasParto = (Date.now() - new Date(partoReciente.fecha_parto + 'T00:00:00').getTime()) / 86400000;
+      if (diasParto <= PARAMS.DESTETE_DIAS) return 'Reproductora Lactante';
+    }
+    if (estadoRepro && estadoRepro.startsWith('Servida')) return 'Reproductora Gestante';
+    return 'Reproductora Vacía';
+  }
+
+  // Machos adultos (≥5 meses)
+  if (a.sexo === 'M' && edad >= 150) return 'Padrote';
+
+  // Categorías por edad
+  if (edad < 30) return 'Gazapo Lactante';
+  if (edad < 60) return 'Destete';
+  if (edad < 120) return 'Crecimiento / Recría';
+
+  // 120-150 días: reemplazo si está seleccionado, sino engorde
+  if (a.categoria === 'Reemplazo' || a.categoria === 'Reposición') return 'Reemplazo';
+  return 'Engorde';
+}
+
+function evaluarPesoISA(pesoKg, categoriaZoo) {
+  const rango = RANGOS_PESO_ISA[categoriaZoo];
+  if (!rango || pesoKg == null) return null;
+  let estado = 'Óptimo';
+  if (pesoKg < rango.min) estado = 'Bajo peso';
+  else if (pesoKg > rango.max) estado = 'Sobrepeso';
+  return { estado, min: rango.min, max: rango.max, actual: pesoKg };
+}
+
 function enriquecerAnimal(a) {
   const p = pesoActual(a.id);
   const rep = a.sexo === 'H' ? estadoReproductivo(a.id) : null;
+  const edadD = edadDias(a.fecha_nacimiento);
+  const catZoo = obtenerCategoriaZootecnica(a, edadD, rep ? rep.estado : null);
+  const pesoKg = p ? p.peso_kg : null;
+  const evalPeso = evaluarPesoISA(pesoKg, catZoo);
   return {
     ...a,
     edad_meses: edadMeses(a.fecha_nacimiento),
-    edad_dias: edadDias(a.fecha_nacimiento),
-    peso_kg: p ? p.peso_kg : null,
+    edad_dias: edadD,
+    peso_kg: pesoKg,
     peso_lb: p ? kgALb(p.peso_kg) : null,
     condicion_corporal: p ? p.condicion_corporal : null,
     fecha_pesaje: p ? p.fecha : null,
     estado_reproductivo: rep ? rep.estado : null,
-    monta_activa: rep ? rep.monta : null
+    monta_activa: rep ? rep.monta : null,
+    categoria_zootecnica: catZoo,
+    evaluacion_peso: evalPeso
   };
 }
 
