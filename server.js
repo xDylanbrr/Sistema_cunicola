@@ -347,3 +347,6 @@ app.get('/api/export/csv', (req, res) => {
 });
 
 startServer(DEFAULT_PORT);
+
+module.exports = app;
+
